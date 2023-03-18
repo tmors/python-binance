@@ -6,6 +6,6 @@
 
 __version__ = "1.0.17"
 
-from binance.client import Client, AsyncClient  # noqa
-from binance.depthcache import DepthCacheManager, OptionsDepthCacheManager, ThreadedDepthCacheManager  # noqa
-from binance.streams import BinanceSocketManager, ThreadedWebsocketManager  # noqa
+from binance.binance.client import Client, AsyncClient  # noqa
+from binance.binance.depthcache import DepthCacheManager, OptionsDepthCacheManager, ThreadedDepthCacheManager  # noqa
+from binance.binance.streams import BinanceSocketManager, ThreadedWebsocketManager  # noqa

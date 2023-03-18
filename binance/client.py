@@ -7530,7 +7530,7 @@ class AsyncClient(BaseClient):
         self = cls(api_key, api_secret, requests_params, tld, base_endpoint, testnet, loop, session_params)
 
         try:
-            await self.ping()
+            # await self.ping()
 
             # calculate timestamp offset between local and binance server
             res = await self.get_server_time()
