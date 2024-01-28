@@ -1,6 +1,33 @@
 Changelog
 =========
 
+v1.0.19 - 2023-08-11
+^^^^^^^^^^^^^^^^^^^^
+
+**Added**
+
+- some new futures and margin endpoints
+- pass session_params to streams for AsyncClient
+
+**Fixed**
+
+- removed debug statements
+- options testnet URL
+- accessing msg variable before assignment
+
+v1.0.18 - 2023-08-09
+^^^^^^^^^^^^^^^^^^^^
+
+**Added**
+
+- TRAILING_STOP_MARKET option for orders
+
+**Fixed**
+
+- futures api endpoint versions
+- margin endpoint request methods
+
+
 v1.0.17 - 2023-02-21
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -16,7 +43,6 @@ v1.0.17 - 2023-02-21
 - Open OCO Orders endpoint
 - Param to pass session params to aiohttp.ClientSession
 
-
 **Updated**
 
 - Some margin endpoint versions
@@ -26,8 +52,6 @@ v1.0.17 - 2023-02-21
 
 - Indefinite websocket reconnect loop
 - Crash on parsing code from some errors
-
-**Added**
 
 v1.0.16 - 2022-04-09
 ^^^^^^^^^^^^^^^^^^^^

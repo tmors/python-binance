@@ -16,6 +16,7 @@ from .client import AsyncClient
 from .enums import FuturesType
 from .exceptions import BinanceWebsocketUnableToConnect
 from .enums import ContractType
+from .helpers import get_loop
 from .threaded_stream import ThreadedApiManager
 
 KEEPALIVE_TIMEOUT = 5 * 60  # 5 minutes
@@ -47,7 +48,7 @@ class ReconnectingWebsocket:
     def __init__(
         self, url: str, path: Optional[str] = None, prefix: str = 'ws/', is_binary: bool = False, exit_coro=None
     ):
-        self._loop = asyncio.get_event_loop()
+        self._loop = get_loop()
         self._log = logging.getLogger(__name__)
         self._path = path
         self._url = url
@@ -321,7 +322,7 @@ class BinanceSocketManager:
         self.VSTREAM_TESTNET_URL = self.VSTREAM_TESTNET_URL.format(client.tld)
 
         self._conns = {}
-        self._loop = asyncio.get_event_loop()
+        self._loop = get_loop()
         self._client = client
         self._user_timeout = user_timeout
 
@@ -338,15 +339,15 @@ class BinanceSocketManager:
     def _get_socket(
         self, path: str, stream_url: Optional[str] = None, prefix: str = 'ws/', is_binary: bool = False,
         socket_type: BinanceSocketType = BinanceSocketType.SPOT
-    ) -> str:
+    ) -> ReconnectingWebsocket:
         conn_id = f'{socket_type}_{path}'
         if conn_id not in self._conns:
             self._conns[conn_id] = ReconnectingWebsocket(
                 path=path,
                 url=self._get_stream_url(stream_url),
                 prefix=prefix,
-                exit_coro=self._exit_socket,
-                is_binary=is_binary
+                exit_coro=lambda p: self._exit_socket(f'{socket_type}_{p}'),
+                is_binary=is_binary,
             )
 
         return self._conns[conn_id]
@@ -1202,10 +1203,10 @@ class ThreadedWebsocketManager(ThreadedApiManager):
 
     def __init__(
         self, api_key: Optional[str] = None, api_secret: Optional[str] = None,
-        requests_params: Optional[Dict[str, str]] = None, tld: str = 'com',
-        testnet: bool = False
+        requests_params: Optional[Dict[str, Any]] = None, tld: str = 'com',
+        testnet: bool = False, session_params: Optional[Dict[str, Any]] = None
     ):
-        super().__init__(api_key, api_secret, requests_params, tld, testnet)
+        super().__init__(api_key, api_secret, requests_params, tld, testnet, session_params)
         self._bsm: Optional[BinanceSocketManager] = None
 
     async def _before_socket_listener_start(self):
