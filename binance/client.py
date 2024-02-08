@@ -6925,6 +6925,14 @@ class Client(BaseClient):
         """
         return self._request_futures_api('get', 'positionRisk', True, 2, data=params)
 
+    def futures_position_information_v2(self, **params):
+        """Get position information
+
+        https://binance-docs.github.io/apidocs/futures/en/#position-information-user_data
+
+        """
+        return self._request_futures_v2_api('get', 'positionRisk', True, data=params)
+
     def futures_account_trades(self, **params):
         """Get trades for the authenticated account and symbol.
 
